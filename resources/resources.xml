@@ -1,0 +1,14 @@
+<resources>
+
+<bitmaps>
+    <bitmap id="id_sync" filename="images/sync.png" />
+    <bitmap id="id_down" filename="images/down.png" />
+    <bitmap id="id_back" filename="images/back.png" />
+</bitmaps>
+
+<menu id="Settings">
+    <menu-item id="menu_starttime">Set Counter Start</menu-item>
+    <menu-item id="menu_about">About</menu-item>
+</menu>
+
+</resources>
