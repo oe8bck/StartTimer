@@ -7,8 +7,17 @@
 </bitmaps>
 
 <menu id="Settings">
+    <menu-item id="menu_startrec">Start Tracking</menu-item>
+    <menu-item id="menu_stoprec">Stop Tracking</menu-item>
     <menu-item id="menu_starttime">Set Counter Start</menu-item>
+    <menu-item id="menu_startbeh">Mode after Start</menu-item>
     <menu-item id="menu_about">About</menu-item>
+</menu>
+
+<menu id="Mode_after_start">
+    <menu-item id="menu_start_race">Start Racing</menu-item>
+    <menu-item id="menu_start_restart">Restart Timer</menu-item>
+    <menu-item id="menu_start_stop">Exit Timer App</menu-item>
 </menu>
 
 </resources>

@@ -25,9 +25,7 @@ using Toybox.Time as Time;
 using Toybox.Timer as Timer;
 using Toybox.Attention as Attention; 
 using Toybox.Position as Position;  // permission required
-
-var counter;
-var counter_start=240;
+using Toybox.Application as App;
 
 class MyWatchView extends Ui.View {
 
@@ -37,18 +35,20 @@ var png_sync,png_down,png_back;
 var speed_kts=0.0;
 var posnInfo=null;
 
+var signalVibrate = [ new Attention.VibeProfile(50, 500) ];
+var countdownVibrate = [ new Attention.VibeProfile(50, 300) ];
+var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
+
     //! Constructor
     function initialize() {
         png_sync = Ui.loadResource(Rez.Drawables.id_sync);
         png_down = Ui.loadResource(Rez.Drawables.id_down);
         png_back = Ui.loadResource(Rez.Drawables.id_back);
         
+        //Sys.println(getCounterStart());
+        
+        App.getApp().setTimerCallback(self.method(:timerCallback));
     	counter=counter_start;
-    	if (timer==null){
-	    	timer=new Timer.Timer();
-	    	timer.start( method(:timerCallback), 1000, true );
-		}
-		
     }
     
 	function onPosition( info ) {
@@ -57,25 +57,35 @@ var posnInfo=null;
 	    posnInfo=info;
 	}
 
-	function timerCallback() {
-		counter-=1;
-		if (counter<0)
-		{
-			counter=counter_start-1;
-		}
-		requestUpdate();
-	}
+    function timerCallback() {
+        counter -= 1;
+        if (counter < 0)
+        {
+            if (startbeh==MENU_START_RESTART){
+	            counter = counter_start-1;
+            }
+            else if (startbeh==MENU_START_STOP){
+            	Ui.popView(Ui.SLIDE_IMMEDIATE);
+            }
+            else if (startbeh==MENU_START_RACE){  // not implemented, yet
+	            counter = counter_start-1;
+            }
+        }
+
+        Ui.requestUpdate();
+    }
 
     function onLayout(dc) {
     }
 
     function onHide() {
         Position.enableLocationEvents(Position.LOCATION_DISABLE, method(:onPosition));
-        timer.stop();
+        App.getApp().pauseTimer();
     }
 
     function onShow() {
         Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:onPosition));
+        App.getApp().resumeTimer();
     }
 
     //! Update the view
@@ -90,10 +100,22 @@ var posnInfo=null;
     	min=counter/60;
     	sec=counter%60;
     	
-    	if (sec==0 || (min==0 && (sec==30||sec==10||sec==5))){
+    	if (sec==0){
+    		if (min==0){ //start
+    			Attention.playTone( Attention.TONE_CANARY    );
+    			Attention.vibrate(countdownVibrate);
+    		} else { // full minute
     		Attention.playTone( Attention.TONE_CANARY    );
+    		Attention.vibrate(startVibrate);
+    		}
+    	} else if (min==0){
+    		if (sec==30||sec==10||sec==5){
+    		Attention.playTone( Attention.TONE_CANARY    );
+    		Attention.vibrate(signalVibrate);
+    		}
     	}
-    	
+
+		// draw arc
         dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     	dc.clear();
         if (counter<15){
@@ -136,6 +158,11 @@ var posnInfo=null;
 		// copyright
         dc.drawText(centerX,dc.getHeight()-27,Graphics.FONT_TINY,"(c) oe8bck",Graphics.TEXT_JUSTIFY_CENTER);
         
+		// recording icon
+		if( session != null && session.isRecording() && sec%2) {
+	        dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_WHITE);
+			dc.fillCircle(centerX+45,centerY-54,5);
+		}
 	}
 }
 
@@ -165,36 +192,14 @@ class InputDelegate extends Ui.BehaviorDelegate
 	}
 
     function onMenu() {
-		Sys.println("Menu");
+		//Sys.println("Menu");
         Ui.pushView( new Rez.Menus.Settings(), new MyMenuDelegate(), Ui.SLIDE_UP );
     }
-
+    
+    function onBack() {
+ 	   Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
 }
 
-class MyMenuDelegate extends Ui.MenuInputDelegate {
-    function onMenuItem(item) {
-    	Sys.println(item);
-        if ( item == :menu_starttime )
-        {
-			//Sys.println("Settings");
-			var np = new Ui.NumberPicker( Ui.NUMBER_PICKER_TIME_MIN_SEC  , counter_start*60 );
-            Ui.pushView( np, new NPDf(), Ui.SLIDE_IMMEDIATE );
-			
-        }
-        else if ( item == :menu_about )
-        {
-			//Sys.println("About");
-			var confirm = new Ui.Confirmation();
-			confirm.initialize("(c) OE8BCK");
-			Ui.pushView( confirm ,new Ui.ConfirmationDelegate(),Ui.SLIDE_UP);
-        }
-    }
-}
-
-class NPDf extends Ui.NumberPickerDelegate {
-    function onNumberPicked(value) {
-    	//Sys.println("Start"+value.value());
-        counter_start = value.value();
-    }
 }
 
