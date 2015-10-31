@@ -26,6 +26,7 @@ var session = null;
 class MyMenuDelegate extends Ui.MenuInputDelegate {
 
     function onMenuItem(item) {
+    	var app=App.getApp();
         if ( item == :menu_about )
         {
 			//Sys.println("About");
@@ -37,15 +38,15 @@ class MyMenuDelegate extends Ui.MenuInputDelegate {
         else if ( item == :menu_startrec )
         {
         	//Sys.println("Start Recording");
-			if ( matchView != null ){
-		        matchView.startRecording();
+			if ( app.matchView != null ){
+		        app.matchView.startRecording();
 		    }
         }
         else if ( item == :menu_stoprec )
         {
         	//Sys.println("Stop Recording");
-			if ( matchView != null ){
-		        matchView.stopRecording();
+			if ( app.matchView != null ){
+		        app.matchView.stopRecording();
 		    }
 	    }
         else if ( item == :menu_settings )
@@ -71,8 +72,9 @@ class MyPickerDelegate extends Ui.PickerDelegate{
   function onAccept( values ){
     for(var i = 0; i< values.size(); i++){
      //Sys.println(values[i]*60);
-     counter_start=values[i]*60;
-     App.getApp().setProperty(COUNTER_START_KEY, counter_start);
+	 var app=App.getApp();
+     app.counter_start=values[i]*60;
+     app.setProperty(COUNTER_START_KEY, counter_start);
    }
    Ui.popView(Ui.SLIDE_DOWN);
    return true;

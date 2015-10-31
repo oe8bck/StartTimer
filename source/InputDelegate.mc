@@ -18,6 +18,7 @@
 
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using Toybox.Application as App;
 
 class InputDelegate extends Ui.BehaviorDelegate
 {
@@ -26,23 +27,25 @@ class InputDelegate extends Ui.BehaviorDelegate
 
 	function onNextPage() {
 		//Sys.println("Back");
-		min=counter/60;
+		var app=App.getApp();
+		min=app.counter/60;
 		//counter=min*60;
-		counter_start=min*60+(Sys.getTimer()-timer_start)/1000;
+		app.counter_start=min*60+(Sys.getTimer()-app.timer_start)/1000;
 		requestUpdate();
 	}
 
 	function onSelect() {
 		//Sys.println("started "+started);
-		sec=counter%60;
-		min=counter/60;
+		var app=App.getApp();
+		sec=app.counter%60;
+		min=app.counter/60;
 		if (sec<30) {
 			//counter=min*60;
-			counter_start=min*60+(Sys.getTimer()-timer_start)/1000;
+			app.counter_start=min*60+(Sys.getTimer()-app.timer_start)/1000;
 		}
 		else {
 			//counter=(min+1)*60;
-			counter_start=(min+1)*60+(Sys.getTimer()-timer_start)/1000;
+			app.counter_start=(min+1)*60+(Sys.getTimer()-app.timer_start)/1000;
 		}
 		requestUpdate();
 	}
@@ -53,10 +56,11 @@ class InputDelegate extends Ui.BehaviorDelegate
     }
 
     function onBack() {
+	   var app=App.getApp();
  	   Ui.popView(Ui.SLIDE_IMMEDIATE);
        //Sys.println("Stop Recording");
-	   if ( matchView != null ){
-		 matchView.stopRecording();
+	   if ( app.matchView != null ){
+		 app.matchView.stopRecording();
 	   }
        return true;
     }

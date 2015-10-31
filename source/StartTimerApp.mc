@@ -35,18 +35,16 @@ enum
     MENU_START_STOP
 }
 
-// Globals
-var counter;
-var counter_start;
-var timer_start;
-var startbeh;
-var matchView=null;
-var app=null;
-var silent_mode=false;
-var vibration=true;
-
 class StartTimerApp extends App.AppBase {
 
+	var counter;
+	var counter_start;
+	var timer_start;
+	var startbeh;
+	var matchView=null;
+	var app=null;
+	var silent_mode=false;
+	var vibration=true;
 	var inputDelegate=null;
 
     hidden var timer;
