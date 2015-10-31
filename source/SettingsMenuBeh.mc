@@ -18,21 +18,19 @@
 
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
-using Toybox.Application as App;
 
 class SettingsMenuBehDelegate extends Ui.MenuInputDelegate {
 
     function onMenuItem(item) {
 
     	var ret=0;
-    	var app=App.getApp();
     	//Sys.println("onMenuItem "+item);
         if ( item == :menu_starttime )
         {
 			//Sys.println("Set Counter Start");
 		    Ui.pushView(new Ui.Picker({:title=>new Ui.Text({:text=>"Number Picker"}),
                                :pattern=>[new MyNumberFactory()],
-                               :defaults=>[app.counter_start%60]}),
+                               :defaults=>[counter_start%60]}),
                 new MyPickerDelegate(),
                 Ui.SLIDE_UP );
             //Sys.println(counter_start);
@@ -40,7 +38,7 @@ class SettingsMenuBehDelegate extends Ui.MenuInputDelegate {
 		else if ( item == :menu_starttime )
         {
         	//Sys.println("MENU_START_STOP");
-	        app.startbeh=MENU_START_STOP;
+	        startbeh=MENU_START_STOP;
         }
         else if ( item == :menu_beep )
         {
@@ -63,13 +61,12 @@ class ConfirmationDelegateSilentMode extends Ui.ConfirmationDelegate
 {
 	function onResponse(response)
 	{
-		var app=App.getApp();
 		if (response==CONFIRM_YES)
-		{ app.silent_mode=true; }
+		{ silent_mode=true; }
 		else
-		{ app.silent_mode=false; }
-		app.setProperty(SILENT_MODE, app.silent_mode);
-        Sys.println("silent_mode: "+app.silent_mode);
+		{ silent_mode=false; }
+		app.setProperty(SILENT_MODE, silent_mode);
+        Sys.println("silent_mode: "+silent_mode);
 	}
 }
 
@@ -77,12 +74,11 @@ class ConfirmationDelegateVibration extends Ui.ConfirmationDelegate
 {
 	function onResponse(response)
 	{
-		var app=App.getApp();
 		if (response==CONFIRM_YES)
-		{ app.vibration=true; }
+		{ vibration=true; }
 		else
-		{ app.vibration=false; }
-		app.setProperty(VIBRATION, app.vibration);
-        Sys.println("vibration: "+app.vibration);
+		{ vibration=false; }
+		app.setProperty(VIBRATION, vibration);
+        Sys.println("vibration: "+vibration);
 	}
 }

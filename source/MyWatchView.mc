@@ -35,7 +35,6 @@ var time;
 var png_sync,png_down,png_back;
 var speed_kts=0.0;
 var posnInfo=null;
-var app=null;
 
 var signalVibrate = [ new Attention.VibeProfile(50, 500) ];
 var countdownVibrate = [ new Attention.VibeProfile(50, 300) ];
@@ -48,11 +47,11 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
         png_back = Ui.loadResource(Rez.Drawables.id_back);
 
         //Sys.println(getCounterStart());
-		app=App.getApp();
-        app.setTimerCallback(self.method(:timerCallback));
-    	app.counter=app.counter_start;
-    	app.timer_start=Sys.getTimer();
-        Sys.println("counter:"+app.counter+", timer_start:"+app.timer_start);
+
+        App.getApp().setTimerCallback(self.method(:timerCallback));
+    	counter=counter_start;
+    	timer_start=Sys.getTimer();
+        Sys.println("counter:"+counter+", timer_start:"+timer_start);
     }
 
 	function onPosition( info ) {
@@ -63,20 +62,20 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 
     function timerCallback() {
         //counter -= 1;
-        app.counter=app.counter_start-(Sys.getTimer()-app.timer_start)/1000;
+        counter=counter_start-(Sys.getTimer()-timer_start)/1000;
 		//Sys.println("Timer: "+Sys.getTimer()+" ,counter: "+counter);
-        if (app.counter < 0)
+        if (counter < 0)
         {
-            if (app.startbeh==MENU_START_RESTART){
+            if (startbeh==MENU_START_RESTART){
             	app.initializeTimer();
             }
-            else if (app.startbeh==MENU_START_STOP){
+            else if (startbeh==MENU_START_STOP){
             	Ui.popView(Ui.SLIDE_IMMEDIATE);
             }
-            else if (app.startbeh==MENU_START_RACE){  // not implemented, yet
-	            app.counter = app.counter_start-1;
+            else if (startbeh==MENU_START_RACE){  // not implemented, yet
+	            counter = counter_start-1;
             }
-        	Sys.println("counter:"+app.counter+", timer_start:"+app.timer_start);
+        	Sys.println("counter:"+counter+", timer_start:"+timer_start);
         }
 
         Ui.requestUpdate();
@@ -87,7 +86,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 
     function onHide() {
         Position.enableLocationEvents(Position.LOCATION_DISABLE, method(:onPosition));
-        app.pauseTimer();
+        App.getApp().pauseTimer();
         // clean-up
 		timer=null;
 		time=0;
@@ -95,14 +94,14 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 
     function onShow() {
         Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:onPosition));
-        app.resumeTimer();
+        App.getApp().resumeTimer();
     }
 
 	function playAttention(tone,vibe)
 	{
-		if (app.silent_mode==false)
+		if (silent_mode==false)
 			{ Attention.playTone( tone ); }
-		if (app.vibration==true)
+		if (vibration==true)
 			{ Attention.vibrate(vibe); }
 	}
 
@@ -115,8 +114,8 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
     	var centerY;
     	var text;
 
-    	min=app.counter/60;
-    	sec=app.counter%60;
+    	min=counter/60;
+    	sec=counter%60;
 
     	if (sec==0 && counter!=counter_start){ // don't do it when countdown starts
     		if (min==0){ //start
@@ -136,10 +135,10 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		// draw arc
         dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     	dc.clear();
-        if (app.counter<15){
-        	deg_stop=90-6*app.counter;
+        if (counter<15){
+        	deg_stop=90-6*counter;
         } else {
-        	deg_stop=360-6*(app.counter-15);
+        	deg_stop=360-6*(counter-15);
         }
     	//Sys.println(deg_stop);
 
