@@ -45,22 +45,40 @@ class SettingsMenuBehDelegate extends Ui.MenuInputDelegate {
         	//Sys.println("Beep");
 			var confirm = new Ui.Confirmation();
 			confirm.initialize("Silent Mode?");
-			ret=Ui.pushView( confirm ,new Ui.ConfirmationDelegate(),Ui.SLIDE_UP);
-			if (ret==CONFIRM_YES)
-			{ silent_mode=true; }
-			else
-			{ silent_mode=false; }
+			Ui.pushView( confirm ,new ConfirmationDelegateSilentMode(),Ui.SLIDE_UP);
         }
         else if ( item == :menu_vib )
         {
         	//Sys.println("Vibrate");
 			var confirm = new Ui.Confirmation();
 			confirm.initialize("Use Vibration?");
-			ret=Ui.pushView( confirm ,new Ui.ConfirmationDelegate(),Ui.SLIDE_UP);
-			if (ret==CONFIRM_YES)
-			{ vibration=true; }
-			else
-			{ vibration=false; }
+			Ui.pushView( confirm ,new ConfirmationDelegateVibration(),Ui.SLIDE_UP);
         }
     }
+}
+
+class ConfirmationDelegateSilentMode extends Ui.ConfirmationDelegate
+{
+	function onResponse(response)
+	{
+		if (response==CONFIRM_YES)
+		{ silent_mode=true; }
+		else
+		{ silent_mode=false; }
+		app.setProperty(SILENT_MODE, silent_mode);
+        Sys.println("silent_mode: "+silent_mode);
+	}
+}
+
+class ConfirmationDelegateVibration extends Ui.ConfirmationDelegate
+{
+	function onResponse(response)
+	{
+		if (response==CONFIRM_YES)
+		{ vibration=true; }
+		else
+		{ vibration=false; }
+		app.setProperty(VIBRATION, vibration);
+        Sys.println("vibration: "+vibration);
+	}
 }

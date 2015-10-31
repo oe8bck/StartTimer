@@ -23,7 +23,9 @@ using Toybox.System as Sys;
 enum
 {
     COUNTER_START_KEY,
-    STARTBEH
+    STARTBEH,
+    SILENT_MODE,
+    VIBRATION
 }
 
 enum
@@ -70,6 +72,17 @@ class StartTimerApp extends App.AppBase {
         {
             startbeh = MENU_START_RESTART;
         }
+        silent_mode=getProperty(SILENT_MODE);
+        if (silent_mode == null)
+        {
+            silent_mode = false;
+        }
+        vibration=getProperty(VIBRATION);
+        if (vibration == null)
+        {
+            vibration = true;
+        }
+
     	initializeTimer();
     }
 
@@ -99,7 +112,6 @@ class StartTimerApp extends App.AppBase {
 		app=null;
 		inputDelegate=null;
 		timer=null;
-		timer_callback=null;
     }
 
     // Return the initial view of your application here

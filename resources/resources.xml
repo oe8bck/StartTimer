@@ -16,7 +16,7 @@
 <menu id="Settings_Menu">
     <menu-item id="menu_starttime">Set Counter Start</menu-item>
     <menu-item id="menu_startbeh">Mode after Start</menu-item>
-    <menu-item id="menu_beep">Beep</menu-item>
+    <menu-item id="menu_beep">Silent Mode</menu-item>
     <menu-item id="menu_vib">Vibrate</menu-item>
 </menu>
 
