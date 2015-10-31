@@ -20,25 +20,13 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 using Toybox.Graphics as Gfx;
-using Toybox.ActivityRecording as Record;
 
 var session = null;
 
 class MyMenuDelegate extends Ui.MenuInputDelegate {
 
     function onMenuItem(item) {
-    	//Sys.println("onMenuItem "+item);
-        if ( item == :menu_starttime )
-        {
-			//Sys.println("Set Counter Start");
-		    Ui.pushView(new Ui.Picker({:title=>new Ui.Text({:text=>"Number Picker"}),
-                               :pattern=>[new MyNumberFactory()],
-                               :defaults=>[counter_start%60]}),
-                new MyPickerDelegate(),
-                Ui.SLIDE_UP );
-            //Sys.println(counter_start);
-        }
-        else if ( item == :menu_about )
+        if ( item == :menu_about )
         {
 			//Sys.println("About");
 			var confirm = new Ui.Confirmation();
@@ -49,47 +37,21 @@ class MyMenuDelegate extends Ui.MenuInputDelegate {
         else if ( item == :menu_startrec )
         {
         	//Sys.println("Start Recording");
-	        if( Toybox has :ActivityRecording ) {
-	            if( ( session == null ) || ( session.isRecording() == false ) ) {
-	                session = Record.createSession({:name=>"Sailing", :sport=>Record.SPORT_GENERIC });
-	                session.start();
-	                Sys.println("start recording");
-	                Ui.requestUpdate();
-	            }
-	            else if( ( session != null ) && session.isRecording() ) {
-	                session.stop();
-	                session.save();
-	                session = null;
-	                Ui.requestUpdate();
-	            }
-	        }
+			if ( matchView != null ){
+		        matchView.startRecording();
+		    }
         }
         else if ( item == :menu_stoprec )
         {
         	//Sys.println("Stop Recording");
-	        if( Toybox has :ActivityRecording ) {
-	            if( session != null && session.isRecording() ) {
-	                Sys.println("stop recording");
-	                session.stop();
-					var confirm = new Ui.Confirmation();
-					confirm.initialize("Save Recording?");
-					if (Ui.pushView( confirm ,new Ui.ConfirmationDelegate(),Ui.SLIDE_UP)){
-		                Sys.println("recording saved");
-		                session.save();
-					}
-					else {
-		                Sys.println("recording NOT saved");
-					}
-					confirm=null;
-	                session = null;
-	                Ui.requestUpdate();
-	            }
-	        }
+			if ( matchView != null ){
+		        matchView.stopRecording();
+		    }
 	    }
-        else if ( item == :menu_startbeh )
+        else if ( item == :menu_settings )
         {
         	//Sys.println("Stop App");
-            Ui.pushView( new Rez.Menus.Mode_after_start(), new MyMenuBehDelegate(), Ui.SLIDE_UP );
+            Ui.pushView( new Rez.Menus.Settings_Menu(), new SettingsMenuBehDelegate(), Ui.SLIDE_UP );
         }
     }
 }
