@@ -1,7 +1,20 @@
-////////////////////////////
-// based on example published in
-// https://forums.garmin.com/showthread.php?328801-Generic-Picker-PickerDelegate-difficulties
-////////////////////////////
+//!
+//!    This file is part of StartTimer.
+//!
+//!    Copyright 2015 Christof Bodner OE8BCK
+//!
+//!    StartTimer is free software: you can redistribute it and/or modify
+//!    it under the terms of the GNU General Public License as published by
+//!    the Free Software Foundation, either version 3 of the License, or
+//!    (at your option) any later version.
+//!
+//!    StartTimer is distributed in the hope that it will be useful,
+//!    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//!    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//!    GNU General Public License for more details.
+//!
+//!    You should have received a copy of the GNU General Public License
+//!    along with StartTimer.  If not, see <http://www.gnu.org/licenses/>.
 
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
@@ -66,7 +79,7 @@ class MyMenuDelegate extends Ui.MenuInputDelegate {
 					}
 					else {
 		                Sys.println("recording NOT saved");
-					}					
+					}
 					confirm=null;
 	                session = null;
 	                Ui.requestUpdate();
