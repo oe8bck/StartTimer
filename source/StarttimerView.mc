@@ -69,7 +69,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
         	counter=0;
         }
 		//Sys.println("Timer: "+Sys.getTimer()+" ,counter: "+counter);
-        Sys.println("startbeh: "+startbeh);
+        //Sys.println("startbeh: "+startbeh);
         if (counter < 0 && runmode==MODE_COUNTDOWN)
         {
 			Sys.println("restartTimer");
@@ -84,7 +84,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 				runmode=MODE_RACE;
 				//timer_start=Sys.getTimer();
             }
-        	Sys.println("counter:"+counter+", timer_start:"+timer_start);
+        	//Sys.println("counter:"+counter+", timer_start:"+timer_start);
         }
 
         Ui.requestUpdate();
@@ -154,10 +154,13 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 	    	}
 		}
 
-		// draw arc
+        dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
+    	dc.clear();
+    	centerX=dc.getWidth()/2;
+    	centerY=dc.getHeight()/2;
+
+		// draw arc or speed
 		if (runmode==MODE_COUNTDOWN){
-	        dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
-	    	dc.clear();
 	        if (counter==null){
 	        	deg_stop=0;
 	        } else {
@@ -168,10 +171,16 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		        }
 		    	//Sys.println(deg_stop);
 			}
+		} else {
+			//dc.drawText(centerX-51,centerY,Graphics.FONT_NUMBER_MILD,speed_kts.format("%3.1f"),Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
+			//dc.drawRoundedRectangle(centerX-70, centerY-30, 10, 60,3);
+			var height=speed_kts/max_speed*80;
+			if (height>80)
+			{  height=80; }
+			dc.drawRoundedRectangle(centerX-70, centerY+40-height, 10, height,3);
+			Sys.println(height);
 		}
 
-    	centerX=dc.getWidth()/2;
-    	centerY=dc.getHeight()/2;
     	if (dc has :drawArc) {
         	dc.drawArc(centerX,centerY,81,1,90,deg_stop);
         	dc.drawArc(centerX,centerY,82,1,90,deg_stop);

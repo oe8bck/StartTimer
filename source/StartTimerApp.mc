@@ -53,6 +53,8 @@ var silent_mode=false;
 var vibration=true;
 var runmode=MODE_STOP;
 
+var max_speed=10.0; /// kts
+
 class StartTimerApp extends App.AppBase {
 
 	var inputDelegate=null;
