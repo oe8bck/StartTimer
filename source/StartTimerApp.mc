@@ -35,6 +35,13 @@ enum
     MENU_START_STOP
 }
 
+enum
+{
+	MODE_STOP,
+	MODE_COUNTDOWN,
+	MODE_RACE
+}
+
 // Globals
 var counter;
 var counter_start;
@@ -44,6 +51,7 @@ var timerView=null;
 var app=null;
 var silent_mode=false;
 var vibration=true;
+var runmode=MODE_STOP;
 
 class StartTimerApp extends App.AppBase {
 
@@ -70,7 +78,7 @@ class StartTimerApp extends App.AppBase {
         startbeh=getProperty(STARTBEH);
         if (startbeh == null)
         {
-            startbeh = MENU_START_RESTART;
+            startbeh = MENU_START_RACE;
             getApp().setProperty(STARTBEH, startbeh);
         }
         silent_mode=getProperty(SILENT_MODE);
@@ -84,6 +92,7 @@ class StartTimerApp extends App.AppBase {
             vibration = true;
         }
 
+		runmode=MODE_COUNTDOWN;
     	initializeTimer();
     }
 

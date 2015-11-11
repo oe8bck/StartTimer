@@ -69,17 +69,20 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
         	counter=0;
         }
 		//Sys.println("Timer: "+Sys.getTimer()+" ,counter: "+counter);
-        if (counter < 0)
+        Sys.println("startbeh: "+startbeh);
+        if (counter < 0 && runmode==MODE_COUNTDOWN)
         {
 			Sys.println("restartTimer");
             if (startbeh==MENU_START_RESTART){
             	app.initializeTimer();
             }
             else if (startbeh==MENU_START_STOP){
+            	runmode=MODE_STOP;
             	Ui.popView(Ui.SLIDE_IMMEDIATE);
             }
-            else if (startbeh==MENU_START_RACE){  // not implemented, yet
-	            counter = counter_start-1;
+            else if (startbeh==MENU_START_RACE){
+				runmode=MODE_RACE;
+				//timer_start=Sys.getTimer();
             }
         	Sys.println("counter:"+counter+", timer_start:"+timer_start);
         }
@@ -128,34 +131,43 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
     		min=59;
     		sec=59;
     	}
+		if (runmode==MODE_RACE){
+			min=-min;
+			sec=-sec;
+		}
 
-    	if (sec==0 && counter!=counter_start){ // don't do it when countdown starts
-    		if (min==0){ //start
-    			playAttention(Attention.TONE_INTERVAL_ALERT,countdownVibrate);
-    		} else { // full minute
-    			playAttention(Attention.TONE_ALERT_LO,startVibrate);
-    		}
-    	} else if (min==0){
-    		if (sec==30||sec==20||sec==10){
-    			playAttention(Attention.TONE_ALERT_HI,signalVibrate);
-    		}
-    		else if (sec==5){
-    			playAttention(Attention.TONE_ALERT_HI,signalVibrate);
-    		}
-    	}
+		// Ring & Vibrate
+		if (runmode==MODE_COUNTDOWN){
+	    	if (sec==0 && counter!=counter_start){ // don't do it when countdown starts
+	    		if (min==0){ //start
+	    			playAttention(Attention.TONE_INTERVAL_ALERT,countdownVibrate);
+	    		} else { // full minute
+	    			playAttention(Attention.TONE_ALERT_LO,startVibrate);
+	    		}
+	    	} else if (min==0){
+	    		if (sec==30||sec==20||sec==10){
+	    			playAttention(Attention.TONE_ALERT_HI,signalVibrate);
+	    		}
+	    		else if (sec==5){
+	    			playAttention(Attention.TONE_ALERT_HI,signalVibrate);
+	    		}
+	    	}
+		}
 
 		// draw arc
-        dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
-    	dc.clear();
-        if (counter==null){
-        	deg_stop=0;
-        } else {
-	        if (counter!=null && counter<15){
-	        	deg_stop=90-6*counter;
+		if (runmode==MODE_COUNTDOWN){
+	        dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
+	    	dc.clear();
+	        if (counter==null){
+	        	deg_stop=0;
 	        } else {
-	        	deg_stop=360-6*(counter-15);
-	        }
-	    	//Sys.println(deg_stop);
+		        if (counter!=null && counter<15){
+		        	deg_stop=90-6*counter;
+		        } else {
+		        	deg_stop=360-6*(counter-15);
+		        }
+		    	//Sys.println(deg_stop);
+			}
 		}
 
     	centerX=dc.getWidth()/2;
@@ -165,11 +177,6 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
         	dc.drawArc(centerX,centerY,82,1,90,deg_stop);
         }
 
-        // Countdown
-        //if (sec<10) {
-        //	text=min+":0"+sec; }
-        //else {
-        //	text=min+":"+sec; }
         text=min+":"+sec.format("%02d");
         dc.drawText(centerX,centerY-2,Graphics.FONT_NUMBER_THAI_HOT,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
 

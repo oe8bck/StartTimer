@@ -55,8 +55,8 @@ class InputDelegate extends Ui.BehaviorDelegate
     function onBack() {
  	   Ui.popView(Ui.SLIDE_IMMEDIATE);
        //Sys.println("Stop Recording");
-	   if ( matchView != null ){
-		 matchView.stopRecording();
+	   if ( timerView != null ){
+		 timerView.stopRecording();
 	   }
        return true;
     }
