@@ -28,7 +28,7 @@ using Toybox.Position as Position;  // permission required
 using Toybox.Application as App;
 using Toybox.ActivityRecording as Record;
 
-class MyWatchView extends Ui.View {
+class StarttimerView extends Ui.View {
 
 var timer=null;
 var time;
@@ -51,7 +51,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
         App.getApp().setTimerCallback(self.method(:timerCallback));
     	counter=counter_start;
     	timer_start=Sys.getTimer();
-        Sys.println("counter:"+counter+", timer_start:"+timer_start);
+        //Sys.println("counter:"+counter+", timer_start:"+timer_start);
     }
 
 	function onPosition( info ) {
@@ -62,10 +62,16 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 
     function timerCallback() {
         //counter -= 1;
-        counter=counter_start-(Sys.getTimer()-timer_start)/1000;
+		if (counter_start!=null && timer_start!=null)
+		{
+	        counter=counter_start-(Sys.getTimer()-timer_start)/1000;
+        } else {
+        	counter=0;
+        }
 		//Sys.println("Timer: "+Sys.getTimer()+" ,counter: "+counter);
         if (counter < 0)
         {
+			Sys.println("restartTimer");
             if (startbeh==MENU_START_RESTART){
             	app.initializeTimer();
             }
@@ -114,8 +120,14 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
     	var centerY;
     	var text;
 
-    	min=counter/60;
-    	sec=counter%60;
+		if (counter!=null)
+		{
+	    	min=counter/60;
+    		sec=counter%60;
+    	} else {
+    		min=59;
+    		sec=59;
+    	}
 
     	if (sec==0 && counter!=counter_start){ // don't do it when countdown starts
     		if (min==0){ //start
@@ -135,12 +147,16 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		// draw arc
         dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     	dc.clear();
-        if (counter<15){
-        	deg_stop=90-6*counter;
+        if (counter==null){
+        	deg_stop=0;
         } else {
-        	deg_stop=360-6*(counter-15);
-        }
-    	//Sys.println(deg_stop);
+	        if (counter!=null && counter<15){
+	        	deg_stop=90-6*counter;
+	        } else {
+	        	deg_stop=360-6*(counter-15);
+	        }
+	    	//Sys.println(deg_stop);
+		}
 
     	centerX=dc.getWidth()/2;
     	centerY=dc.getHeight()/2;
@@ -150,10 +166,10 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
         }
 
         // Countdown
-        if (sec<10) {
-        	text=min+":0"+sec; }
-        else {
-        	text=min+":"+sec; }
+        //if (sec<10) {
+        //	text=min+":0"+sec; }
+        //else {
+        //	text=min+":"+sec; }
         text=min+":"+sec.format("%02d");
         dc.drawText(centerX,centerY-2,Graphics.FONT_NUMBER_THAI_HOT,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
 

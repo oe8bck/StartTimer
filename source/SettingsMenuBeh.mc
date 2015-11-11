@@ -28,6 +28,8 @@ class SettingsMenuBehDelegate extends Ui.MenuInputDelegate {
         if ( item == :menu_starttime )
         {
 			//Sys.println("Set Counter Start");
+			if (counter_start==null){
+				counter_start=240;}
 		    Ui.pushView(new Ui.Picker({:title=>new Ui.Text({:text=>"Number Picker"}),
                                :pattern=>[new MyNumberFactory()],
                                :defaults=>[counter_start%60]}),
@@ -35,10 +37,11 @@ class SettingsMenuBehDelegate extends Ui.MenuInputDelegate {
                 Ui.SLIDE_UP );
             //Sys.println(counter_start);
         }
-		else if ( item == :menu_starttime )
+		else if ( item == :menu_startbeh )
         {
-        	//Sys.println("MENU_START_STOP");
-	        startbeh=MENU_START_STOP;
+        	Sys.println("menu_startbeh");
+        	Ui.pushView( new Rez.Menus.Mode_after_start(), new StartmodeMenuDelegate(), Ui.SLIDE_UP );
+  	        startbeh=MENU_START_STOP;
         }
         else if ( item == :menu_beep )
         {
@@ -81,4 +84,30 @@ class ConfirmationDelegateVibration extends Ui.ConfirmationDelegate
 		app.setProperty(VIBRATION, vibration);
         Sys.println("vibration: "+vibration);
 	}
+}
+
+class StartmodeMenuDelegate extends Ui.MenuInputDelegate {
+
+    function onMenuItem(item) {
+
+    	var ret=0;
+    	//Sys.println("StartmodeMenuDelegate "+item);
+        if ( item == :menu_start_race )
+        {
+        	startbeh=MENU_START_RACE;
+			Sys.println("menu_start_race");
+        }
+		else if ( item == :menu_start_restart )
+        {
+        	startbeh=MENU_START_RESTART;
+			Sys.println("menu_start_restart");
+        }
+        else if ( item == :menu_start_stop )
+        {
+        	startbeh=MENU_START_STOP;
+			Sys.println("menu_start_stop");
+        }
+		app.setProperty(STARTBEH, startbeh);
+
+    }
 }

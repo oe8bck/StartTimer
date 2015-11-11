@@ -40,7 +40,7 @@ var counter;
 var counter_start;
 var timer_start;
 var startbeh;
-var matchView=null;
+var timerView=null;
 var app=null;
 var silent_mode=false;
 var vibration=true;
@@ -55,10 +55,10 @@ class StartTimerApp extends App.AppBase {
     function initializeTimer() {
     	app=getApp();
         counter_start = getProperty(COUNTER_START_KEY);
-        Sys.println("counter_start:"+counter_start);
+        //Sys.println("counter_start:"+counter_start);
     	counter=counter_start;
     	timer_start=Sys.getTimer();
-        Sys.println("counter:"+counter+", timer_start:"+timer_start);
+        //Sys.println("counter:"+counter+", timer_start:"+timer_start);
     }
 
     function initialize() {
@@ -71,6 +71,7 @@ class StartTimerApp extends App.AppBase {
         if (startbeh == null)
         {
             startbeh = MENU_START_RESTART;
+            getApp().setProperty(STARTBEH, startbeh);
         }
         silent_mode=getProperty(SILENT_MODE);
         if (silent_mode == null)
@@ -108,7 +109,7 @@ class StartTimerApp extends App.AppBase {
 		counter=0;
 		counter_start=0;
 		timer_start=0;
-		matchView=null;
+		timerView=null;
 		app=null;
 		inputDelegate=null;
 		timer=null;
@@ -116,9 +117,9 @@ class StartTimerApp extends App.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() {
-    	matchView = new MyWatchView();
+    	timerView = new StarttimerView();
     	inputDelegate = new InputDelegate();
-        return [ matchView , inputDelegate];
+        return [ timerView , inputDelegate];
     }
 
     function pauseTimer() {

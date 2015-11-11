@@ -25,5 +25,4 @@
     <menu-item id="menu_start_restart">Restart Timer</menu-item>
     <menu-item id="menu_start_stop">Exit Timer App</menu-item>
 </menu>
-
 </resources>
