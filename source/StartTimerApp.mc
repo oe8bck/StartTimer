@@ -108,10 +108,10 @@ class StartTimerApp extends App.AppBase {
     // onStop() is called when your application is exiting
     function onStop() {
         Sys.println("onStop()");
-        //App.saveProperties();
-		if ( matchView != null ){
-	        Sys.println("stopRecording:"+matchView);
-        	matchView.stopRecording();
+        getApp().saveProperties();
+		if ( timerView != null ){
+	        Sys.println("stopRecording:"+timerView);
+        	timerView.stopRecording();
         }
         pauseTimer();
         timer_callback = null;

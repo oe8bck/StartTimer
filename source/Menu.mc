@@ -37,15 +37,15 @@ class MyMenuDelegate extends Ui.MenuInputDelegate {
         else if ( item == :menu_startrec )
         {
         	//Sys.println("Start Recording");
-			if ( matchView != null ){
-		        matchView.startRecording();
+			if ( timerView != null ){
+		        timerView.startRecording();
 		    }
         }
         else if ( item == :menu_stoprec )
         {
         	//Sys.println("Stop Recording");
-			if ( matchView != null ){
-		        matchView.stopRecording();
+			if ( timerView != null ){
+		        timerView.stopRecording();
 		    }
 	    }
         else if ( item == :menu_settings )
