@@ -34,20 +34,17 @@ class MyMenuDelegate extends Ui.MenuInputDelegate {
 			Ui.pushView( confirm ,new Ui.ConfirmationDelegate(),Ui.SLIDE_UP);
 			confirm=null;
         }
-        else if ( item == :menu_startrec )
+        else if ( item == :menu_togglerec )
         {
         	//Sys.println("Start Recording");
 			if ( timerView != null ){
-		        timerView.startRecording();
+				if (timerView.isRecording()==false){
+		        	timerView.startRecording();
+	        	} else {
+		        	timerView.stopRecording();
+				}
 		    }
         }
-        else if ( item == :menu_stoprec )
-        {
-        	//Sys.println("Stop Recording");
-			if ( timerView != null ){
-		        timerView.stopRecording();
-		    }
-	    }
         else if ( item == :menu_settings )
         {
         	//Sys.println("Stop App");

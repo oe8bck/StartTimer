@@ -49,7 +49,13 @@ class InputDelegate extends Ui.BehaviorDelegate
 
     function onMenu() {
 		//Sys.println("Menu");
-        Ui.pushView( new Rez.Menus.Main_Menu(), new MyMenuDelegate(), Ui.SLIDE_UP );
+		var menu=new Rez.Menus.Main_Menu();
+		if (timerView.isRecording()==true) {
+			menu.setTitle("Tracking");
+		} else {
+			menu.setTitle("NOT Tracking");
+		}
+        Ui.pushView( menu, new MyMenuDelegate(), Ui.SLIDE_UP );
     }
 
     function onBack() {

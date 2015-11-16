@@ -217,6 +217,16 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		}
 	}
 
+	function isRecording() {
+		var ret;
+		if ( session == null ) {
+			ret=false;
+		} else {
+			ret=session.isRecording();
+		}
+		return ret;
+	}
+
     function startRecording() {
         //Sys.println("Start Recording");
         if( Toybox has :ActivityRecording ) {

@@ -7,8 +7,7 @@
 </bitmaps>
 
 <menu id="Main_Menu">
-    <menu-item id="menu_startrec">Start Tracking</menu-item>
-    <menu-item id="menu_stoprec">Stop Tracking</menu-item>
+    <menu-item id="menu_togglerec">Toggle Tracking</menu-item>
     <menu-item id="menu_settings">Settings</menu-item>
     <menu-item id="menu_about">About</menu-item>
 </menu>
