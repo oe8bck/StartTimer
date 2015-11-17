@@ -114,6 +114,11 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 			{ Attention.vibrate(vibe); }
 	}
 
+	function min(a,b) {
+		if (a<b) { return a; }
+		else { return b; }
+	}
+
     //! Update the view
     function onUpdate(dc) {
     	var deg_stop=89;
@@ -121,6 +126,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
     	var sec=0;
     	var centerX;
     	var centerY;
+    	var heading=0;
     	var text;
 
 		if (counter!=null)
@@ -159,6 +165,10 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
     	centerX=dc.getWidth()/2;
     	centerY=dc.getHeight()/2;
 
+		if (posnInfo!=null) {
+			heading = posnInfo.heading*90/Math.PI;
+		}
+
 		// draw arc or speed
 		if (runmode==MODE_COUNTDOWN){
 	        if (counter==null){
@@ -171,33 +181,60 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		        }
 		    	//Sys.println(deg_stop);
 			}
-		} else {
-			//dc.drawText(centerX-51,centerY,Graphics.FONT_NUMBER_MILD,speed_kts.format("%3.1f"),Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
-			//dc.drawRoundedRectangle(centerX-70, centerY-30, 10, 60,3);
-			var height=speed_kts/max_speed*80;
-			if (height>80)
-			{  height=80; }
-			dc.drawRoundedRectangle(centerX-70, centerY+40-height, 10, height,3);
-			Sys.println(height);
-		}
+	    	if (dc has :drawArc) {
+	        	dc.drawArc(centerX,centerY,81,1,90,deg_stop);
+	        	dc.drawArc(centerX,centerY,82,1,90,deg_stop);
+	        }
 
-    	if (dc has :drawArc) {
-        	dc.drawArc(centerX,centerY,81,1,90,deg_stop);
-        	dc.drawArc(centerX,centerY,82,1,90,deg_stop);
-        }
-
+		// countdown
         text=min+":"+sec.format("%02d");
         dc.drawText(centerX,centerY-2,Graphics.FONT_NUMBER_THAI_HOT,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
 
 		// speed / heading
 		if (posnInfo!=null) {
-			var heading = posnInfo.heading*90/Math.PI;
 			if (heading<0.0){
 				heading+=360.0;
 			}
 			text=speed_kts.format("%3.1f")+" kn/"+heading.format("%03d");
 			dc.drawText(centerX,centerY-51,Graphics.FONT_NUMBER_MILD,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
 		}
+		} else { // race mode
+			//dc.drawText(centerX-51,centerY,Graphics.FONT_NUMBER_MILD,speed_kts.format("%3.1f"),Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
+			//dc.drawRoundedRectangle(centerX-70, centerY-30, 10, 60,3);
+        	//var pct=min(1,speed_kts/max_speed);
+	        //if (pct<0.25){
+	        //	deg_stop=90*(1-4.0*pct);
+	        //} else {
+	        //	deg_stop=360-270*(pct-0.25);
+	        //}
+			//Sys.println(deg_stop);
+	    	//if (dc has :drawArc) {
+	        //	dc.drawArc(centerX,centerY,81,1,deg_stop,90);
+	        //	dc.drawArc(centerX,centerY,82,1,deg_stop,90);
+	        //}
+			// speed
+	        text=speed_kts.format("%3.2f");
+	        dc.drawText(centerX,centerY-2,Graphics.FONT_NUMBER_THAI_HOT,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
+	        dc.drawText(centerX+72,centerY+20,Graphics.FONT_NUMBER_MILD,"kn",Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
+			// heading and tack hints
+			if (posnInfo!=null) {
+				var tack_left=heading-tackAngle;
+				if (tack_left<0.0){
+					tack_left+=360.0;
+				}
+				var tack_right=heading+tackAngle;
+				if (tack_right<0.0){
+					tack_right+=360.0;
+				}
+				text=tack_left.format("%03d")+" / "+heading.format("%03d")+" / "+tack_right.format("%03d");
+				dc.drawText(centerX,centerY-51,Graphics.FONT_NUMBER_MILD,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
+			}
+			// speed symbol
+			var height=min(80,speed_kts/max_speed*80);
+			dc.fillRoundedRectangle(centerX-74, centerY+40-height, 10, height,3);
+		}
+
+		// time
         var info = Calendar.info(Time.now(), Time.FORMAT_LONG);
 		text=info.hour.format("%2d")+":"+info.min.format("%02d")+":"+info.sec.format("%02d");
 		dc.drawText(centerX,centerY+56,Graphics.FONT_NUMBER_MILD,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
@@ -213,7 +250,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		// recording icon
 		if( session != null && session.isRecording() && sec%2) {
 	        dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_WHITE);
-			dc.fillCircle(centerX+45,centerY-54,5);
+			dc.fillCircle(centerX+58,centerY-49,5);
 		}
 	}
 

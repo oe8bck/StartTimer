@@ -54,6 +54,7 @@ var vibration=true;
 var runmode=MODE_STOP;
 
 var max_speed=10.0; /// kts
+var tackAngle=45.0;
 
 class StartTimerApp extends App.AppBase {
 
