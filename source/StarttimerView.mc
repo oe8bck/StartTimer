@@ -215,7 +215,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 			// speed
 	        text=speed_kts.format("%3.2f");
 	        dc.drawText(centerX,centerY-2,Graphics.FONT_NUMBER_THAI_HOT,text,Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
-	        dc.drawText(centerX+72,centerY+20,Graphics.FONT_NUMBER_MILD,"kn",Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
+	        dc.drawText(centerX+74,centerY+20,Graphics.FONT_NUMBER_MILD,"kn",Graphics.TEXT_JUSTIFY_CENTER+Graphics.TEXT_JUSTIFY_VCENTER);
 			// heading and tack hints
 			if (posnInfo!=null) {
 				var tack_left=heading-tackAngle;
@@ -231,7 +231,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 			}
 			// speed symbol
 			var height=min(80,speed_kts/max_speed*80);
-			dc.fillRoundedRectangle(centerX-74, centerY+40-height, 10, height,3);
+			dc.drawRoundedRectangle(centerX-74, centerY+40-height, 10, height,3);
 		}
 
 		// time
@@ -250,7 +250,7 @@ var startVibrate = [ new Attention.VibeProfile(50, 1000) ];
 		// recording icon
 		if( session != null && session.isRecording() && sec%2) {
 	        dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_WHITE);
-			dc.fillCircle(centerX+58,centerY-49,5);
+			dc.fillCircle(centerX+58,centerY-48,5);
 		}
 	}
 
